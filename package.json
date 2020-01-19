@@ -1,0 +1,18 @@
+{
+  "name": "Movies2",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "client": "cd my-app && yarn start",
+    "server": "nodemon server.js",
+    "dev": "concurrently \"yarn server\" \"yarn client\""
+  },
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "concurrently": "^5.0.2",
+    "express": "^4.17.1",
+    "mysql2": "^2.1.0",
+    "nodemon": "^2.0.2"
+  }
+}
