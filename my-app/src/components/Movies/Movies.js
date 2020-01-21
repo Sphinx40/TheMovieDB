@@ -19,6 +19,12 @@ const Movies = ({ history, page_id }) => {
         getMovies(path);        
     }, [path])
 
+    useEffect(() => {
+        setPath(`${API_URL}/movie/popular?api_key=${API_KEY}&language=ru-RU&page=${page_id}`)
+        setLoading(false)
+    }, [page_id])
+
+
     const getMovies = (path) => {
         axios.get(path)
             .then((res) => {
@@ -27,15 +33,9 @@ const Movies = ({ history, page_id }) => {
                 setMovies(data)
                 setMainMovieImage(data[random])
                 setLoading(true)
-                
             })
     }
 
-
-    useEffect(() => {
-        setPath(`${API_URL}/movie/popular?api_key=${API_KEY}&language=ru-RU&page=${page_id}`)
-        setLoading(false)
-    }, [page_id])
         
     const onPageChange = (page) => {
         if (page === 1) {
@@ -50,7 +50,7 @@ const Movies = ({ history, page_id }) => {
             {loading ?
                 <MainImage
                     image={`${IMAGE_URL}${IMAGE_SIZE}${MainMovieImage.backdrop_path}`}
-                    title={MainMovieImage.original_title}
+                    title={MainMovieImage.title}
                     text={MainMovieImage.overview}
                 /> : <Segment textAlign='center'><Spinner /></Segment>}
                 <Divider hidden />
