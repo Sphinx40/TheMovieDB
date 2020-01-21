@@ -10,6 +10,8 @@ const Details = ({ movie_id }) => {
     const IMAGE_SIZE = 'w1280';
     const [loading, setLoading] = useState(false);
     const [movie, setMovie] = useState();
+    const [show, setShow] = useState(false);
+    const [crew, setCrew] = useState([]);
 
 
     useEffect(() => {
@@ -21,20 +23,14 @@ const Details = ({ movie_id }) => {
             })
         axios.get(`${API_URL}movie/${movie_id}/credits?api_key=${API_KEY}&language=ru-RU`)
             .then((res) => {
-                console.log(res.data)
+                setCrew(res.data.crew)
             })
     }, [movie_id])
 
-    /*<Table.Row>
-                                {movie.genres.map((item,id) => (
-                                    <Table.HeaderCell key={id}>{item.name}</Table.HeaderCell>
-                                ))}
-                            </Table.Row>*/
-
-
-                            
-
-                                
+    const onToggleActorView = () => {
+        setShow(!show)
+    }
+         
 
     return (
         <Fragment>
@@ -91,7 +87,7 @@ const Details = ({ movie_id }) => {
                             </Table.Row>
                             {
                                 movie.genres.map((item, id) => (
-                                    <Table.Row>
+                                    <Table.Row key={id}>
                                         <Table.Cell></Table.Cell>
                                         <Table.Cell></Table.Cell>
                                         <Table.Cell></Table.Cell>
@@ -105,8 +101,14 @@ const Details = ({ movie_id }) => {
                     </Table>
                     </Segment>
                 <Segment textAlign='center' basic>
-                    <Button color='instagram'>Toggle actor view</Button>
+                    <Button color='instagram' onClick={onToggleActorView}>Toggle actor view</Button>
                 </Segment>
+
+                {
+                    show ? crew.map((item,id) => (
+                        <Image src={IMAGE_URL+item.profile_path}></Image>
+                    )) : null
+                }
                     
             </Container> : null}
         </Fragment>

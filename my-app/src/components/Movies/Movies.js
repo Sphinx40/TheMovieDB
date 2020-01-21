@@ -45,6 +45,7 @@ const Movies = ({ history, page_id }) => {
         }
     }
 
+    
     return (
         <Fragment>
             {loading ?
@@ -62,7 +63,6 @@ const Movies = ({ history, page_id }) => {
                             <Grid.Column key={id} >
                                 <Link to={`/movie/${item.id}`}><Image src={`${IMAGE_URL}w500${item.poster_path}`} id='box'></Image></Link>
                             <Divider hidden></Divider></Grid.Column>
-                            
                         ))}
                     </Grid.Row>
                 </Grid></Segment> : <Segment textAlign='center'><Spinner/></Segment>}
