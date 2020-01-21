@@ -1,13 +1,14 @@
 import React, { useState, Fragmen, useEffect, Fragment } from 'react';
 import Spinner from '../Spinner/Spinner';
-import { Segment, Container, Button, Table, Divider, Label } from 'semantic-ui-react';
+import { Segment, Container, Button, Table, Divider, Label, Image, Grid, Header, Card } from 'semantic-ui-react';
 import MainImage from '../MainImage/MainImage';
 import axios from 'axios';
 const Details = ({ movie_id }) => {
     const API_KEY = '2af995031242e9bf96fb7bce86c8f7e9';
     const API_URL = 'https://api.themoviedb.org/3/';
     const IMAGE_URL = 'http://image.tmdb.org/t/p/';
-    const IMAGE_SIZE = 'w1280';
+    const IMAGE_SIZE1 = 'w200';
+    const IMAGE_SIZE2 = 'w1280';
     const [loading, setLoading] = useState(false);
     const [movie, setMovie] = useState();
     const [show, setShow] = useState(false);
@@ -15,6 +16,7 @@ const Details = ({ movie_id }) => {
 
 
     useEffect(() => {
+        window.scrollTo(0, 0)
         axios.get(`${API_URL}movie/${movie_id}?api_key=${API_KEY}&language=ru-RU`)
             .then((res) => {
                 setMovie(res.data)
@@ -23,8 +25,10 @@ const Details = ({ movie_id }) => {
             })
         axios.get(`${API_URL}movie/${movie_id}/credits?api_key=${API_KEY}&language=ru-RU`)
             .then((res) => {
-                setCrew(res.data.crew)
+                setCrew(res.data.cast)
+                console.log(res.data)
             })
+        
     }, [movie_id])
 
     const onToggleActorView = () => {
@@ -36,7 +40,7 @@ const Details = ({ movie_id }) => {
         <Fragment>
             {loading ?
                 <MainImage
-                    image={`${IMAGE_URL}${IMAGE_SIZE}${movie.belongs_to_collection !== null ? movie.belongs_to_collection.backdrop_path : movie.backdrop_path}`}
+                    image={`${IMAGE_URL}${IMAGE_SIZE2}${movie.belongs_to_collection !== null ? movie.belongs_to_collection.backdrop_path : movie.backdrop_path}`}
                     title={movie.title}
                     text={movie.overview}
                 /> : <Segment textAlign='center'><Spinner /></Segment>}
@@ -101,14 +105,28 @@ const Details = ({ movie_id }) => {
                     </Table>
                     </Segment>
                 <Segment textAlign='center' basic>
-                    <Button color='instagram' onClick={onToggleActorView}>Toggle actor view</Button>
+                    <Button color='facebook' onClick={onToggleActorView}>Toggle actor view</Button>
                 </Segment>
 
+                
                 {
-                    show ? crew.map((item,id) => (
-                        <Image src={IMAGE_URL+item.profile_path}></Image>
-                    )) : null
+                    show ? <Segment><Grid>
+                        <Grid.Row>
+                            {crew.map((item, id) => (
+                                item.profile_path !== null ? <Fragment key={id}>
+                                    <div class="card" >
+                                        <img src={`${IMAGE_URL}${IMAGE_SIZE1}${item.profile_path}`} class="card-img-top" alt="..." />
+                                        <div class="card-body">
+                                            <h5 class="card-title">{item.name}</h5>
+                                            <p class="card-text">Character: {item.character} </p>
+                                        </div>
+                                    </div>
+                                </Fragment> : null
+                            ))}
+                        </Grid.Row>
+                    </Grid></Segment> : null
                 }
+                    
                     
             </Container> : null}
         </Fragment>

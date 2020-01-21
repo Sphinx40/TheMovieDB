@@ -17,6 +17,7 @@ const Movies = ({ history, page_id }) => {
 
     useEffect(() => {
         getMovies(path);        
+        window.scrollTo(0, 0)
     }, [path])
 
     useEffect(() => {
@@ -36,7 +37,6 @@ const Movies = ({ history, page_id }) => {
             })
     }
 
-        
     const onPageChange = (page) => {
         if (page === 1) {
             history.push(`/`)
