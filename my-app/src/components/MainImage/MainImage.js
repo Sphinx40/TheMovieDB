@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { Header } from 'semantic-ui-react';
 
 function MainImage(props) {
     return (
@@ -19,7 +20,7 @@ function MainImage(props) {
         >
             <div>
                 <div style={{ position: 'absolute', maxWidth: '500px', bottom: '2rem', marginLeft: '2rem' }} >
-                    <h2 style={{ color: 'white' }} level={2} > {props.title} </h2>
+                    <Header style={{ color: 'white' }} as='h2' > {props.title} </Header>
                     <p style={{ color: 'white', fontSize: '1rem' }}  >{props.text} </p>
                 </div>
             </div>
@@ -27,4 +28,4 @@ function MainImage(props) {
     )
 }
 
-export default MainImage;
+export default MainImage

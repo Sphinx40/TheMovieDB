@@ -89,20 +89,17 @@ const Details = ({ movie_id }) => {
                                 <Table.Cell>{movie.budget}</Table.Cell>
                                 <Table.Cell>{movie.genres[0].name}</Table.Cell>
                             </Table.Row>
-                            <Table.Row>
-                            <Table.Cell></Table.Cell>
-                            <Table.Cell></Table.Cell>
-                            <Table.Cell></Table.Cell>
-                            <Table.Cell></Table.Cell>
-                            <Table.Cell>{movie.genres[1].name}</Table.Cell>
-                            </Table.Row>
-                            <Table.Row>
-                            <Table.Cell></Table.Cell>
-                            <Table.Cell></Table.Cell>
-                            <Table.Cell></Table.Cell>
-                            <Table.Cell></Table.Cell>
-                            <Table.Cell>{movie.genres[2].name}</Table.Cell>
-                            </Table.Row>
+                            {
+                                movie.genres.map((item, id) => (
+                                    <Table.Row>
+                                        <Table.Cell></Table.Cell>
+                                        <Table.Cell></Table.Cell>
+                                        <Table.Cell></Table.Cell>
+                                        <Table.Cell></Table.Cell>
+                                        <Table.Cell>{item.name}</Table.Cell>
+                                    </Table.Row>
+                                ))
+                            }
                         </Table.Body>
 
                     </Table>
