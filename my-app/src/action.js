@@ -25,3 +25,17 @@ export const menuName = (name) => {
         payload: name
     }
 }
+
+export const AllFavorites = (data) => {
+    return {
+        type: 'FAVORITE',
+        payload: data
+    }
+}
+
+export const addToFavorite = (data) => {
+    return {
+        type: 'ADD_FAVORITE',
+        payload: data
+    }
+}

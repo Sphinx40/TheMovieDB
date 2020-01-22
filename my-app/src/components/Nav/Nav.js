@@ -33,6 +33,9 @@ const Nav = ({ state, sign, log, menuName, history, pass }) => {
     if (name === 'Sign up') {
       menuName(name)
     }
+    if (name === 'favorite') {
+      menuName(name)
+    }
 
   }
 
@@ -49,6 +52,16 @@ const Nav = ({ state, sign, log, menuName, history, pass }) => {
           to='/'
         />
         <Menu.Menu position='right'>
+          
+        <Menu.Item
+          icon={'favorite'}
+          name={'favorite'}
+          active={menu === 'favorite'}
+          onClick={(e, { name }) => handleItemClick(name)}
+          as={Link}
+          to='/favorite'
+        />
+
         {signIn ? null : 
           <Menu.Item
           icon={'sign in'}

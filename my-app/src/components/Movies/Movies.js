@@ -13,15 +13,10 @@ const Movies = ({ history, page_id }) => {
     const [loading, setLoading] = useState(false);
     const [movies, setMovies] = useState([]);
     const [MainMovieImage, setMainMovieImage] = useState(null);
-    const [path, setPath] = useState(`${API_URL}/movie/popular?api_key=${API_KEY}&language=ru-RU&page=1`);
 
     useEffect(() => {
-        getMovies(path);        
+        getMovies(`${API_URL}/movie/popular?api_key=${API_KEY}&language=ru-RU&page=${page_id}`);        
         window.scrollTo(0, 0)
-    }, [path])
-
-    useEffect(() => {
-        setPath(`${API_URL}/movie/popular?api_key=${API_KEY}&language=ru-RU&page=${page_id}`)
         setLoading(false)
     }, [page_id])
 

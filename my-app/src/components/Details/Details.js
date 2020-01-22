@@ -1,9 +1,13 @@
-import React, { useState, Fragmen, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import Spinner from '../Spinner/Spinner';
+import { connect } from 'react-redux';
 import { Segment, Container, Button, Table, Divider, Label, Image, Grid, Header, Card } from 'semantic-ui-react';
 import MainImage from '../MainImage/MainImage';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
-const Details = ({ movie_id }) => {
+import * as action from '../../action';
+
+const Details = ({ movie_id, state, history, menuName, AllFavorites }) => {
     const API_KEY = '2af995031242e9bf96fb7bce86c8f7e9';
     const API_URL = 'https://api.themoviedb.org/3/';
     const IMAGE_URL = 'http://image.tmdb.org/t/p/';
@@ -13,7 +17,7 @@ const Details = ({ movie_id }) => {
     const [movie, setMovie] = useState();
     const [show, setShow] = useState(false);
     const [crew, setCrew] = useState([]);
-
+    const { signIn, login } = state;
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -26,13 +30,40 @@ const Details = ({ movie_id }) => {
         axios.get(`${API_URL}movie/${movie_id}/credits?api_key=${API_KEY}&language=ru-RU`)
             .then((res) => {
                 setCrew(res.data.cast)
-                console.log(res.data)
             })
         
     }, [movie_id])
 
     const onToggleActorView = () => {
         setShow(!show)
+    }
+
+    const addFavorite = () => {
+        if (signIn) {
+            const favorite = {
+                movieId: movie.id,
+                title: movie.title,
+                img: `${IMAGE_URL}w500${movie.poster_path}`,
+                table: login
+            }
+            axios.get(`/api/favorite/search?title=${favorite.title}&&table=${login}`)
+            .then((res) => {
+                if (res.data.length === 0) {
+                    axios.post(`/api/favorite/add`, favorite)
+                    .then(() => {
+                        axios.get(`/api/favorite?table=${login}`)
+                            .then((res) => {
+                                AllFavorites(res.data)
+                            })
+                    })
+                } else {
+
+                }
+            })            
+        } else {
+            history.push('/SignIn')
+            menuName('Sign in')
+        }
     }
          
 
@@ -47,7 +78,7 @@ const Details = ({ movie_id }) => {
             {loading ? <Container fluid>
             <Divider hidden/>
                 <Segment basic padded='very'>
-                    <Button color='grey' floated='right'>Add to Favourite</Button>
+                    <Button color='grey' floated='right' onClick={addFavorite}>Add to Favorite</Button>
                     <Table style={{ marginTop: 50}} attached='top' celled>
                         <Table.Header>
                             <Table.Row>
@@ -118,7 +149,7 @@ const Details = ({ movie_id }) => {
                                         <img src={`${IMAGE_URL}${IMAGE_SIZE1}${item.profile_path}`} class="card-img-top" alt="..." />
                                         <div class="card-body">
                                             <h5 class="card-title">{item.name}</h5>
-                                            <p class="card-text">Character: {item.character} </p>
+                                            <p class="card-text">{item.character !== null && item.character !== undefined ? item.character : null} </p>
                                         </div>
                                     </div>
                                 </Fragment> : null
@@ -133,4 +164,10 @@ const Details = ({ movie_id }) => {
     )
 }
 
-export default Details;
+const mapStateToProps = (state) => {
+    return {
+        state
+    }
+}
+
+export default connect(mapStateToProps, action)(withRouter(Details));

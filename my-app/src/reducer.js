@@ -2,7 +2,8 @@ let initial = {
     login: '',
     password: '',
     signIn: false,
-    menu: 'Movies app'
+    menu: 'Movies app',
+    favorites: []
 }
 
 const reducer = (state=initial, action) => {
@@ -26,6 +27,11 @@ const reducer = (state=initial, action) => {
             return {
                 ...state,
                 menu: action.payload
+            }
+        case 'FAVORITE':
+            return {
+                ...state,
+                favorites: [...action.payload]
             }
         default: 
             return state;

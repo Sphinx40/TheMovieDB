@@ -27,7 +27,7 @@ const Sign = ({ log, state, sign, menuName, history, pass }) => {
                         setActive(true)
                         sign(true)
                         setForm({ login: '', password: '' })
-                        menuName('Notes App')
+                        menuName('Movies app')
                         history.push('/')
                     } else {
                         setCorrect(true)

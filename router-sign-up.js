@@ -15,7 +15,7 @@ router.post('/signup/create', (req, res) => {
 })
 
 router.post('/signup/createTable', (req, res) => {
-    db.query(`CREATE TABLE ${req.body.login} (id INT NOT NULL AUTO_INCREMENT,favourite LONGTEXT NOT NULL,PRIMARY KEY (id));`, (err, results, fields) => {
+    db.query(`CREATE TABLE ${req.body.login} (id INT NOT NULL AUTO_INCREMENT,title LONGTEXT NOT NULL,img LONGTEXT NOT NULL,movieId LONGTEXT NOT NULL,PRIMARY KEY (id));`, (err, results, fields) => {
         res.json(results)
     })
 })
