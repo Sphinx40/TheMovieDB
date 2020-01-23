@@ -57,7 +57,17 @@ const Details = ({ movie_id, state, history, menuName, AllFavorites }) => {
                             })
                     })
                 } else {
-
+                    axios.delete(`/api/favorite/update/delete?table=${login}&&title=${favorite.title}`)
+                    .then(() => {
+                      axios.post(`/api/favorite/add`, favorite)
+                    .then(() => {
+                        axios.get(`/api/favorite?table=${login}`)
+                            .then((res) => {
+                                AllFavorites(res.data)
+                            })
+                    })  
+                    })
+                    
                 }
             })            
         } else {

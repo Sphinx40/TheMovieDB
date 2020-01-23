@@ -22,13 +22,13 @@ router.post('/favorite/add', (req, res) => {
 
 router.delete('/favorite/delete', (req, res) => {
     db.query(`DELETE FROM ${req.query.table} WHERE title='${req.query.title}' AND id=${req.query.id} ;`, (err, results, fields) => {
-        if (err) {
-            console.log('ooops',err)
-            res.send(err)
-        } else {
             res.json(results)
-        }
-        
+    })
+})
+
+router.delete('/favorite/update/delete', (req, res) => {
+    db.query(`DELETE FROM ${req.query.table} WHERE title='${req.query.title}';`, (err, results, fields) => {
+            res.json(results)
     })
 })
 
