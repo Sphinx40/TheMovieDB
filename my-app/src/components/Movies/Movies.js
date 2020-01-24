@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import axios from 'axios';
 import './Movies.css';
 import Spinner from '../Spinner/Spinner';
-import { Grid, Segment, Button, Image, Divider, Header, Container, Pagination } from 'semantic-ui-react';
+import { Grid, Segment, Button, Image, Divider, Header, Container, Pagination, Input, Search } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
 import MainImage from '../MainImage/MainImage';
 const Movies = ({ history, page_id }) => {
@@ -29,6 +29,7 @@ const Movies = ({ history, page_id }) => {
                 setMovies(data)
                 setMainMovieImage(data[random])
                 setLoading(true)
+                console.log(data,'data')
             })
     }
 
@@ -43,6 +44,7 @@ const Movies = ({ history, page_id }) => {
     
     return (
         <Fragment>
+            
             {loading ?
                 <MainImage
                     image={`${IMAGE_URL}${IMAGE_SIZE}${MainMovieImage.backdrop_path}`}
@@ -50,13 +52,14 @@ const Movies = ({ history, page_id }) => {
                     text={MainMovieImage.overview}
                 /> : <Segment textAlign='center'><Spinner /></Segment>}
                 <Divider hidden />
+                <Segment basic>
                 <Header as='h2' textAlign='center'>Movies by lates</Header>
                 <Divider />
-                {loading ? <Segment><Grid columns={5}>
+                {loading ? <Segment basic><Grid columns={5}>
                     <Grid.Row>
                         {movies.map((item, id) => (
                             <Grid.Column key={id} >
-                                <Link to={`/movie/${item.id}`}><Image src={`${IMAGE_URL}w500${item.poster_path}`} id='box'></Image></Link>
+                                {item.poster_path !== undefined || item.poster_path !== null ? <Link to={`/movie/${item.id}`}><Image src={`${IMAGE_URL}w500${item.poster_path}`} id='box'></Image></Link> : null}
                             <Divider hidden></Divider></Grid.Column>
                         ))}
                     </Grid.Row>
@@ -71,7 +74,7 @@ const Movies = ({ history, page_id }) => {
                     activePage={page_id}
                     totalPages={500}
                     onPageChange={(event, { activePage }) => onPageChange(activePage)}
-                /></Segment>
+                /></Segment></Segment>
         </Fragment>
     )
 }
