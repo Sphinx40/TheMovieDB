@@ -24,12 +24,11 @@ const Movies = ({ history, page_id }) => {
     const getMovies = (path) => {
         axios.get(path)
             .then((res) => {
-                let random = Math.floor(Math.random() * 19);
                 const data = res.data.results;
+                let random = Math.floor(Math.random() * data.length);
                 setMovies(data)
                 setMainMovieImage(data[random])
                 setLoading(true)
-                console.log(data,'data')
             })
     }
 
@@ -41,10 +40,9 @@ const Movies = ({ history, page_id }) => {
         }
     }
 
-    
+
     return (
         <Fragment>
-            
             {loading ?
                 <MainImage
                     image={`${IMAGE_URL}${IMAGE_SIZE}${MainMovieImage.backdrop_path}`}
