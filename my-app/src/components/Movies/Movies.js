@@ -13,12 +13,18 @@ const Movies = ({ history, page_id }) => {
     const [loading, setLoading] = useState(false);
     const [movies, setMovies] = useState([]);
     const [MainMovieImage, setMainMovieImage] = useState(null);
+    const [search, setSearch] = useState('');
+    const [paginationSize, setPaginationSize] = useState(1);
+    const [searchActive, setSearchActive] = useState(false);
+    const [activePage, setActivePage] = useState(1);
 
     useEffect(() => {
         getMovies(`${API_URL}/movie/popular?api_key=${API_KEY}&language=ru-RU&page=${page_id}`);        
         window.scrollTo(0, 0)
         setLoading(false)
+        setActivePage(page_id)
     }, [page_id])
+
 
 
     const getMovies = (path) => {
@@ -29,17 +35,56 @@ const Movies = ({ history, page_id }) => {
                 setMovies(data)
                 setMainMovieImage(data[random])
                 setLoading(true)
+                setPaginationSize(res.data.total_pages)
+                console.log(res.data)
             })
     }
 
     const onPageChange = (page) => {
-        if (page === 1) {
-            history.push(`/`)
+        if (!searchActive) {
+            if (page === 1) {
+                history.push(`/`)
+            } else {
+                history.push(`/page/${page}`)
+            }
         } else {
-            history.push(`/page/${page}`)
+            axios.get(`https://api.themoviedb.org/3/search/movie?query=${search}&api_key=${API_KEY}&language=ru-RU&page=${page}`)
+            .then((res) => {
+                setMovies(res.data.results)
+                setSearchActive(true)
+                setActivePage(page)
+            })
         }
     }
 
+    const onInputChange = (e) => {
+        if (e.key === 'Enter') {
+            setLoading(false)
+            if (e.target.value !== ''){
+            axios.get(`https://api.themoviedb.org/3/search/movie?query=${e.target.value}&api_key=${API_KEY}&language=ru-RU&page=1`)
+            .then((res) => {
+                //history.push(`/search/${e.target.value}`)
+                setPaginationSize(res.data.total_pages)
+                setMovies(res.data.results)
+                console.log(res.data)
+                setSearchActive(true)
+                setActivePage(1)
+                setLoading(true)
+            })
+            } else {
+                getMovies(`${API_URL}/movie/popular?api_key=${API_KEY}&language=ru-RU&page=${page_id}`);
+                window.scrollTo(0, 0)
+                setLoading(false)
+                setActivePage(page_id)
+            }
+        } else {
+            setSearchActive(false)
+           setSearch(e.target.value) 
+        }
+    }
+
+
+    
 
     return (
         <Fragment>
@@ -53,6 +98,7 @@ const Movies = ({ history, page_id }) => {
                 <Segment basic>
                 <Header as='h2' textAlign='center'>Movies by lates</Header>
                 <Divider />
+                <Input fluid placeholder='Search...' icon='search' value={search} onChange={onInputChange} onKeyDown={onInputChange} />
                 {loading ? <Segment basic><Grid columns={5}>
                     <Grid.Row>
                         {movies.map((item, id) => (
@@ -64,15 +110,15 @@ const Movies = ({ history, page_id }) => {
                 </Grid></Segment> : <Segment textAlign='center'><Spinner/></Segment>}
                 <Divider hidden></Divider>
                 <Segment textAlign='center' basic>
-                <Pagination
+                {loading ? <Pagination
                     firstItem={null}
                     lastItem={null}
                     pointing
                     secondary
-                    activePage={page_id}
-                    totalPages={500}
+                    activePage={activePage}
+                    totalPages={paginationSize}
                     onPageChange={(event, { activePage }) => onPageChange(activePage)}
-                /></Segment></Segment>
+                /> : null}</Segment></Segment>
         </Fragment>
     )
 }

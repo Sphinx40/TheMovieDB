@@ -26,7 +26,6 @@ const App = () => {
               return <Movies page_id={id} />
             }}
             exact />
-
           <Route path="/SignIn" component={SignIn} />
           <Route path='/SignUp' component={SignUp} />
           <Route path='/favorite' component={Favorite} />
